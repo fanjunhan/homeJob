@@ -1,0 +1,99 @@
+# ================= 生产环境覆盖配置 =================
+# 激活：java -jar service-cloud-saas.jar --spring.profiles.active=prod
+#
+# 生产铁律：
+#   1. 所有密钥走环境变量，禁止出现任何字面量默认值
+#   2. ddl-auto 必须为 none（绝不 validate 之外的任何值）
+#   3. 关闭 Swagger 与详细健康信息
+#   4. 日志降到 info，SQL 关闭
+
+spring:
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: none        # 绝不自动改表；结构变更走 Flyway/Liquibase
+    open-in-view: false
+  # 生产不允许本地 H2 之类的兜底数据源，必须由 DB_* 环境变量提供
+  datasource:
+    hikari:
+      minimum-idle: 10
+      maximum-pool-size: 50
+      connection-timeout: 10000
+      leak-detection-threshold: 60000
+
+  session:
+    timeout: 30m
+  mvc:
+    problemdetails:
+      enabled: true
+
+# 密钥无默认值——缺失即启动失败，避免误用弱密钥上线
+saas:
+  jwt:
+    secret: ${JWT_SECRET}
+    ttl-days: 7
+
+integration:
+  wecom:
+    corp-id: ${WECOM_CORP_ID}
+    corp-secret: ${WECOM_CORP_SECRET}
+    agent-id: ${WECOM_AGENT_ID}
+    suite-id: ${WECOM_SUITE_ID}
+    suite-secret: ${WECOM_SUITE_SECRET}
+    token: ${WECOM_CALLBACK_TOKEN}
+    aes-key: ${WECOM_CALLBACK_AES_KEY}
+    schedule-url: ${WECOM_SCHEDULE_URL}
+  miniapp:
+    app-id: ${MINIAPP_APP_ID}
+    app-secret: ${MINIAPP_APP_SECRET}
+    token: ${MINIAPP_CALLBACK_TOKEN}
+    aes-key: ${MINIAPP_CALLBACK_AES_KEY}
+    template-id-service-finish: ${MINIAPP_TMPL_FINISH}
+
+oss:
+  endpoint: ${OSS_ENDPOINT}
+  bucket: ${OSS_BUCKET}
+  access-key-id: ${OSS_AK}
+  access-key-secret: ${OSS_SK}
+  url-prefix: ${OSS_URL_PREFIX}
+
+sms:
+  provider: ${SMS_PROVIDER}
+  sign-name: ${SMS_SIGN_NAME}
+
+logging:
+  level:
+    root: warn
+    com.example.service.saas: info
+    cn.binaryflyer.wxjava: warn
+    org.hibernate.SQL: off
+  file:
+    name: ${LOG_FILE:/data/logs/service-saas/prod.log}
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: never
+
+server:
+  # 生产建议前置 Nginx；此处仅保留服务端基础设置
+  tomcat:
+    threads:
+      max: 200
+      min-spare: 20
+    max-connections: 8192
+    accept-count: 100
+  shutdown: graceful
+
+spring.lifecycle:
+  timeout-per-shutdown-phase: 30s

@@ -1,0 +1,62 @@
+# ================= 测试环境配置（H2 内存库） =================
+# 激活：mvn test（由 @ActiveProfiles("test") 指定）
+#
+# 单元/集成测试用 H2 内存库，测试结束自动销毁，无需外部依赖。
+# 注意：H2 与 MySQL 方言差异较大，涉及日期函数、索引类型的用例请在真实 MySQL 上做集成验证。
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:service_saas_test;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE;DB_CLOSE_DELAY=-1
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: create-drop      # 测试用：建表 → 测试 → 销毁
+    show-sql: false
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+
+  # 测试环境不启动异步与定时任务，避免消息重试任务干扰用例
+#（如需屏蔽，用 @MockBean 替换 NotificationRetryJob 更精确）
+
+logging:
+  level:
+    root: warn
+    com.example.service.saas: info
+  file:
+    name: logs/service-saas-test.log
+
+# 测试态统一使用固定假密钥与假 AppID，避免读环境变量
+saas:
+  jwt:
+    secret: unit-test-secret-key-at-least-32-bytes-long
+    ttl-days: 1
+
+integration:
+  wecom:
+    corp-id: wwTEST0000000000
+    agent-id: 1000002
+    token: test-callback-token
+    # EncodingAESKey 为 43 位、不带结尾 '='，补 '=' 后解码为 32 字节 AES-256 密钥
+    aes-key: jWmYm7qr5nMoAUwZRjGtBxmz3KA1tkAj3ykkR6q2B2C
+  miniapp:
+    app-id: wxTEST0000000000
+    token: test-miniapp-token
+    aes-key: jWmYm7qr5nMoAUwZRjGtBxmz3KA1tkAj3ykkR6q2B2C
+    template-id-service-finish: test-template-id
+
+oss:
+  endpoint: oss-cn-hangzhou.aliyuncs.com
+  bucket: test-bucket
+  access-key-id: test-ak
+  access-key-secret: test-sk
+
+sms:
+  provider: log
+
+springdoc:
+  api-docs:
+    enabled: false

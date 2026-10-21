@@ -1,0 +1,38 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/index/index",
+    "pages/service/service",
+    "pages/sign/sign",
+    "pages/rate/rate"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#0B8A4E",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "服务云管家",
+    "backgroundColor": "#F6F7F9",
+    "backgroundTextStyle": "light",
+    "enablePullDownRefresh": false
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents",
+  "networkTimeout": {
+    "request": 15000,
+    "connectSocket": 15000,
+    "uploadFile": 30000,
+    "downloadFile": 30000
+  },
+  "requiredPrivateInfos": [
+    "getFuzzyLocation",
+    "chooseAddress",
+    "chooseLocation",
+    "onLocationChange"
+  ],
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于展示您附近门店的服务范围"
+    }
+  },
+  "workers": ""
+}

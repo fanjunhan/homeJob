@@ -1,0 +1,50 @@
+<view class="page" wx:if="{{s}}">
+  <view class="card">
+    <view class="card-row">
+      <view class="grow">
+        <view class="card-title big">{{s.serviceDate}} 上门服务</view>
+        <view class="card-sub">工单号 {{s.id}}</view>
+      </view>
+      <view class="status {{s.statusTheme}}">{{s.statusText}}</view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="kv"><text class="k">计划时间</text><text class="v">{{s.plannedStart}} - {{s.plannedEnd}}</text></view>
+    <view class="kv"><text class="k">服务时长</text><text class="v">{{s.durationMin}} 分钟</text></view>
+    <view class="kv" wx:if="{{s.actualStart}}"><text class="k">实际上门</text><text class="v ok">{{s.actualStart}}</text></view>
+    <view class="kv" wx:if="{{s.actualEnd}}"><text class="k">完成时间</text><text class="v ok">{{s.actualEnd}}</text></view>
+    <view class="kv" wx:if="{{s.staffName}}"><text class="k">服务员工</text><text class="v">{{s.staffName}}</text></view>
+    <view class="kv" wx:if="{{s.address}}"><text class="k">服务地址</text><text class="v">{{s.address}}</text></view>
+  </view>
+
+  <view class="card" wx:if="{{signatureUrl}}">
+    <view class="card-title">您的电子签名</view>
+    <image class="sign-preview" src="{{signatureUrl}}" mode="widthFix" bindtap="previewSignature" />
+    <view class="card-sub" wx:if="{{signedAt}}">签署时间：{{signedAt}}</view>
+  </view>
+
+  <view class="card" wx:if="{{s.score}}">
+    <view class="card-title">您的评价</view>
+    <view class="stars">{{starsText}}</view>
+    <view class="card-sub" wx:if="{{s.comment}}">{{s.comment}}</view>
+    <view class="tag-row" wx:if="{{s.tags.length > 0}}">
+      <view class="tag" wx:for="{{s.tags}}" wx:key="*this">{{item}}</view>
+    </view>
+  </view>
+
+  <view class="notice">服务完成后，请确认服务信息并完成电子签名，然后对本次服务进行评价。</view>
+
+  <button class="btn-primary" wx:if="{{s.status === 'finished'}}" bindtap="goSign">确认服务并签名</button>
+  <button class="btn-primary" wx:elif="{{s.status === 'signed'}}" bindtap="goRate">去评价服务</button>
+  <view class="done-tip" wx:elif="{{s.status === 'evaluated'}}">本单已完成签名与评价，感谢您的信任</view>
+  <view class="done-tip" wx:elif="{{s.status === 'cancelled'}}">本单已取消，如有疑问请联系门店店长</view>
+</view>
+
+<view class="page" wx:elif="{{loading}}">
+  <view class="empty">加载中…</view>
+</view>
+
+<view class="page" wx:else>
+  <view class="empty">服务记录不存在或已失效</view>
+</view>

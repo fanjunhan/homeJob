@@ -1,0 +1,28 @@
+<view class="login-page">
+  <view class="brand">
+    <view class="logo">服</view>
+    <view class="brand-name">服务云管家</view>
+    <view class="brand-sub">上门服务确认 · 电子签名 · 服务评价</view>
+  </view>
+
+  <view class="card">
+    <button class="btn-primary" open-type="getPhoneNumber" bindgetphonenumber="onGetPhone">手机号快捷登录</button>
+
+    <view class="agree">
+      <checkbox-group bindchange="toggleAgree">
+        <label>
+          <checkbox checked="{{agree}}" color="#0B8A4E" />
+          已阅读并同意<text class="link" bindtap="openProtocol">《用户协议》</text>与<text class="link" bindtap="openProtocol">《隐私政策》</text>
+        </label>
+      </checkbox-group>
+    </view>
+
+    <view class="card-sub">
+      登录后将自动匹配您的客户服务档案；如未匹配到档案，请联系门店店长维护。
+    </view>
+
+    <view class="notice">
+      提示：首次使用建议允许「服务通知」，以便员工完成服务后第一时间收到提醒。
+    </view>
+  </view>
+</view>

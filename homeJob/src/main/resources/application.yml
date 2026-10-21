@@ -1,0 +1,139 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      force: true
+
+spring:
+  application:
+    name: service-cloud-saas
+  # 多环境激活：dev（默认）/ test / prod
+  # 启动覆盖：java -jar app.jar --spring.profiles.active=prod
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/${DB_NAME:service_saas}?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+    username: ${DB_USER:root}
+    password: ${DB_PWD:root123456}
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      pool-name: ServiceSaaasHikariPool
+
+  jpa:
+    hibernate:
+      # 生产环境务必改为 validate，禁止自动改表
+      ddl-auto: ${JPA_DDL_AUTO:none}
+    show-sql: ${JPA_SHOW_SQL:false}
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+  # 多租户隔离说明：实体通过 TenantAware 审计字段 + Service 层显式
+  # TenantContext.tenantId() 过滤实现。若改用 Hibernate @Filter 方案，
+  # 在这里开启 enableTenantFilter 并在 TenantContextFilter 中设置 session。
+  tenant:
+    filter-enabled: false
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 15MB
+
+  jackson:
+    default-property-inclusion: non_null
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+
+  mvc:
+    throw-exception-if-no-handler-found: true
+  web:
+    resources:
+      add-mappings: false
+
+#================= 业务自定义配置 =================
+saas:
+  jwt:
+    # 生产环境必须用环境变量覆盖：export JWT_SECRET='至少32字节的随机串'
+    secret: ${JWT_SECRET:service-cloud-saas-jwt-secret-please-override-in-prod}
+    ttl-days: 7
+
+integration:
+  wecom:
+    # 自建应用模式（单企业）
+    corp-id: ${WECOM_CORP_ID:ww0000000000000000}
+    corp-secret: ${WECOM_CORP_SECRET:}
+    agent-id: ${WECOM_AGENT_ID:1000002}
+    # 服务商第三方应用模式（多租户 SaaS 推荐）：suite-id + suite-secret 换授权方 access_token
+    suite-id: ${WECOM_SUITE_ID:}
+    suite-secret: ${WECOM_SUITE_SECRET:}
+    # 回调配置（企微后台「接收消息/事件服务器」需与此保持一致）
+    token: ${WECOM_CALLBACK_TOKEN:}
+    aes-key: ${WECOM_CALLBACK_AES_KEY:}
+    # 企微应用消息跳转的排班详情 H5 地址（需配置到应用主页/菜单）
+    schedule-url: ${WECOM_SCHEDULE_URL:https://saas.example.com/wecom/schedule.html}
+
+  miniapp:
+    app-id: ${MINIAPP_APP_ID:wx0000000000000000}
+    app-secret: ${MINIAPP_APP_SECRET:}
+    token: ${MINIAPP_CALLBACK_TOKEN:}
+    aes-key: ${MINIAPP_CALLBACK_AES_KEY:}
+    # 订阅消息模板（服务完成提醒）
+    template-id-service-finish: ${MINIAPP_TMPL_FINISH:}
+
+#================= 对象存储（电子签名图片） =================
+oss:
+  endpoint: ${OSS_ENDPOINT:oss-cn-shanghai.aliyuncs.com}
+  bucket: ${OSS_BUCKET:service-saas-sign}
+  access-key-id: ${OSS_AK:}
+  access-key-secret: ${OSS_SK:}
+  # 自定义 CDN 域名，为空则用 https://{bucket}.{endpoint}/ 拼接
+  url-prefix: ${OSS_URL_PREFIX:}
+
+#================= 第三方通道 =================
+sms:
+  # log-占位实现（LogSmsClient）；生产替换为阿里云 SMS / 腾讯云 SMS
+  provider: log
+  sign-name: ${SMS_SIGN_NAME:}
+
+logging:
+  level:
+    root: info
+    com.example.service.saas: debug
+    # WxJava 的 token 刷新日志很啰嗦，生产建议 warn
+    cn.binaryflyer.wxjava: warn
+    org.hibernate.SQL: ${SQL_LOG:warn}
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{40} - %msg%n"
+  file:
+    name: ${LOG_FILE:logs/service-saas.log}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when_authorized
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html

@@ -1,0 +1,151 @@
+/* 全局样式：小程序端共用 */
+page {
+  background: #F6F7F9;
+  font-size: 26rpx;
+  color: #1F2329;
+}
+
+.card {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(31, 35, 41, 0.04);
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: 500;
+}
+
+.card-sub {
+  font-size: 24rpx;
+  color: #646A73;
+  margin-top: 6rpx;
+  line-height: 1.6;
+}
+
+.kv {
+  display: flex;
+  justify-content: space-between;
+  font-size: 26rpx;
+  padding: 14rpx 0;
+  border-bottom: 1rpx solid #F1F2F4;
+}
+
+.kv:last-child {
+  border-bottom: none;
+}
+
+.kv .k {
+  color: #8A9099;
+  flex: none;
+}
+
+.kv .v {
+  font-weight: 500;
+  text-align: right;
+}
+
+.kv .v.ok {
+  color: #0F6E56;
+}
+
+.btn-primary {
+  background: #0B8A4E;
+  color: #fff;
+  border-radius: 12rpx;
+  padding: 22rpx;
+  text-align: center;
+  font-size: 30rpx;
+  margin: 10rpx 0 20rpx;
+}
+
+.btn-primary.disabled {
+  background: #C9CDD4;
+}
+
+.status {
+  font-size: 22rpx;
+  border-radius: 20rpx;
+  padding: 4rpx 16rpx;
+  flex: none;
+}
+
+.st-notified, .st-scheduled { background: #E6F1FB; color: #185FA5; }
+.st-accepted { background: #E1F5EE; color: #0F6E56; }
+.st-in_service { background: #FAEEDA; color: #854F0B; }
+.st-finished { background: #E1F5EE; color: #0F6E56; }
+.st-signed, .st-evaluated { background: #EAF3DE; color: #3B6D11; }
+.st-cancelled { background: #F1F2F4; color: #646A73; }
+
+/* button 默认自带白底与边框，统一压掉，由 .btn-primary 控制外观 */
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font-size: inherit;
+  color: inherit;
+  line-height: inherit;
+}
+
+button::after {
+  border: none;
+}
+
+.tag-group-head {
+  font-size: 24rpx;
+  color: #8A9099;
+  font-weight: 500;
+  margin: 16rpx 0 8rpx;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.tag {
+  background: #E6F1FB;
+  color: #185FA5;
+  font-size: 22rpx;
+  border-radius: 8rpx;
+  padding: 6rpx 16rpx;
+  border: 1rpx solid transparent;
+}
+
+.tag.on {
+  background: #185FA5;
+  color: #fff;
+}
+
+.stars {
+  color: #EF9F27;
+  font-size: 30rpx;
+  letter-spacing: 6rpx;
+}
+
+.star-row {
+  display: flex;
+  justify-content: center;
+  gap: 24rpx;
+  margin: 20rpx 0 8rpx;
+}
+
+.star {
+  font-size: 60rpx;
+  color: #D3D9E0;
+}
+
+.star.on {
+  color: #EF9F27;
+}
+
+.empty {
+  text-align: center;
+  color: #8A9099;
+  font-size: 26rpx;
+  padding: 80rpx 0;
+}

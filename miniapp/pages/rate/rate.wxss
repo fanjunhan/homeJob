@@ -1,0 +1,42 @@
+.page {
+  padding: 24rpx;
+}
+
+.center {
+  text-align: center;
+}
+
+.score-text {
+  min-height: 34rpx;
+  color: #EF9F27;
+  font-weight: 500;
+}
+
+.sel-count {
+  color: #185FA5;
+  font-weight: 500;
+  margin-left: 8rpx;
+}
+
+.empty.small {
+  padding: 30rpx 0;
+  font-size: 24rpx;
+}
+
+.comment {
+  width: 100%;
+  height: 140rpx;
+  border: 1rpx solid #E5E7EB;
+  border-radius: 12rpx;
+  padding: 16rpx;
+  font-size: 26rpx;
+  background: #FCFCFD;
+  box-sizing: border-box;
+}
+
+.comment-count {
+  font-size: 20rpx;
+  color: #8A9099;
+  text-align: right;
+  margin-top: 8rpx;
+}

@@ -1,0 +1,52 @@
+<view class="page" wx:if="{{!loading}}">
+  <view class="section-title">待确认服务</view>
+  <view wx:if="{{pending.length === 0}}" class="empty">
+    <view class="empty-icon">✓</view>
+    暂无待确认的服务
+  </view>
+  <view
+    class="card"
+    wx:for="{{pending}}"
+    wx:key="id"
+    data-id="{{item.id}}"
+    bindtap="goDetail"
+  >
+    <view class="card-row">
+      <view class="grow">
+        <view class="card-title">{{item.serviceDate}} 上门服务</view>
+        <view class="card-sub">{{item.plannedStart}} - {{item.plannedEnd}} · {{item.durationMin}} 分钟</view>
+        <view class="card-sub ok" wx:if="{{item.actualStart}}">员工已上门打卡：{{item.actualStart}}</view>
+        <view class="card-sub ok" wx:if="{{item.actualEnd}}">服务已完成：{{item.actualEnd}}</view>
+      </view>
+      <view class="status {{item.statusTheme}}">{{item.statusText}}</view>
+    </view>
+    <view class="link-row">查看详情 ›</view>
+  </view>
+
+  <view class="section-title">历史服务</view>
+  <view wx:if="{{history.length === 0}}" class="empty">暂无历史服务记录</view>
+  <view
+    class="card"
+    wx:for="{{history}}"
+    wx:key="id"
+    data-id="{{item.id}}"
+    bindtap="goDetail"
+  >
+    <view class="card-row">
+      <view class="grow">
+        <view class="card-title">{{item.serviceDate}} 上门服务</view>
+        <view class="card-sub">{{item.plannedStart}} · {{item.durationMin}} 分钟</view>
+      </view>
+      <view class="status {{item.statusTheme}}">{{item.statusText}}</view>
+    </view>
+  </view>
+
+  <view class="footer-tip" wx:if="{{!subscribed}}">
+    开启服务通知后，员工完成服务将第一时间提醒您确认
+    <text class="link" bindtap="openSubscribe">立即开启</text>
+  </view>
+</view>
+
+<view class="page" wx:elif="{{loading}}">
+  <view class="empty">加载中…</view>
+</view>

@@ -1,0 +1,49 @@
+.page {
+  padding: 24rpx;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 500;
+  margin: 10rpx 4rpx 16rpx;
+}
+
+.card-row {
+  display: flex;
+  gap: 16rpx;
+  align-items: flex-start;
+}
+
+.grow {
+  flex: 1;
+  min-width: 0;
+}
+
+.link-row {
+  font-size: 24rpx;
+  color: #0B8A4E;
+  text-align: right;
+  margin-top: 12rpx;
+}
+
+.card-sub.ok {
+  color: #0F6E56;
+}
+
+.empty-icon {
+  font-size: 56rpx;
+  color: #C9CDD4;
+  margin-bottom: 12rpx;
+}
+
+.footer-tip {
+  font-size: 22rpx;
+  color: #8A9099;
+  text-align: center;
+  padding: 40rpx 0 20rpx;
+  line-height: 1.8;
+}
+
+.footer-tip .link {
+  color: #0B8A4E;
+}

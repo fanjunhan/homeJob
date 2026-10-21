@@ -1,0 +1,46 @@
+<view class="page">
+  <view class="card center">
+    <view class="card-sub">为本次服务打分</view>
+    <view class="star-row">
+      <view class="star {{score >= 1 ? 'on' : ''}}" data-v="1" bindtap="setScore">★</view>
+      <view class="star {{score >= 2 ? 'on' : ''}}" data-v="2" bindtap="setScore">★</view>
+      <view class="star {{score >= 3 ? 'on' : ''}}" data-v="3" bindtap="setScore">★</view>
+      <view class="star {{score >= 4 ? 'on' : ''}}" data-v="4" bindtap="setScore">★</view>
+      <view class="star {{score >= 5 ? 'on' : ''}}" data-v="5" bindtap="setScore">★</view>
+    </view>
+    <view class="card-sub score-text">{{scoreText}}</view>
+  </view>
+
+  <view class="card">
+    <view class="card-sub">
+      服务项目勾选（最多 {{maxTags}} 项）
+      <text class="sel-count">已选 {{selected.length}}/{{maxTags}}</text>
+    </view>
+    <view wx:if="{{groups.length === 0}}" class="empty small">服务项目目录加载中…</view>
+    <block wx:for="{{groups}}" wx:key="name" wx:for-item="group">
+      <view class="tag-group-head">{{group.name}}（{{group.count}} 项）</view>
+      <view class="tag-row">
+        <view
+          wx:for="{{group.items}}"
+          wx:key="*this"
+          class="tag {{selected.indexOf(item) >= 0 ? 'on' : ''}}"
+          data-t="{{item}}"
+          bindtap="toggleTag"
+        >{{item}}</view>
+      </view>
+    </block>
+  </view>
+
+  <view class="card">
+    <textarea
+      class="comment"
+      placeholder="说说本次服务的感受（选填）"
+      value="{{comment}}"
+      maxlength="500"
+      bindinput="onComment"
+    ></textarea>
+    <view class="comment-count">{{comment.length}}/500</view>
+  </view>
+
+  <button class="btn-primary" bindtap="submit" disabled="{{submitting}}">提交评价</button>
+</view>

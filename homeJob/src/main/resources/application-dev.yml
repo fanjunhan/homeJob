@@ -1,0 +1,59 @@
+# ================= 本地开发环境覆盖配置 =================
+# 激活：mvn spring-boot:run   （application.yml 中 spring.profiles.active 默认 dev）
+#
+# 与主配置的差异：
+#   1. 打开 SQL 与业务 debug 日志，便于排查
+#   2. 允许 JPA 自动建表（开发期省去手动执行 DDL），生产务必保持 none
+#   3. 打开 Swagger UI
+
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update      # ⚠ 仅开发环境使用；生产必须为 none/validate
+    properties:
+      hibernate:
+        format_sql: true
+
+# 多租户过滤：若已实现 Hibernate @Filter 方案，开发期可开启验证
+  tenant:
+    filter-enabled: false
+
+integration:
+  wecom:
+    corp-id: ww0000000000000000
+    corp-secret:
+    agent-id: 1000002
+    token:
+    aes-key:
+  miniapp:
+    app-id: wx0000000000000000
+    app-secret:
+
+oss:
+  endpoint: oss-cn-shanghai.aliyuncs.com
+  bucket: service-saas-sign-dev
+  access-key-id:
+  access-key-secret:
+
+logging:
+  level:
+    root: info
+    com.example.service.saas: debug
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
+    cn.binaryflyer.wxjava: info
+  file:
+    name: logs/service-saas-dev.log
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,env,configprops

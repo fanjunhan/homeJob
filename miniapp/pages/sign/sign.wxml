@@ -1,0 +1,24 @@
+<view class="page">
+  <view class="card">
+    <view class="card-sub">请在下方区域手写签名，确认本次服务已完成</view>
+    <canvas
+      id="sigCanvas"
+      class="sig-canvas"
+      disable-scroll="true"
+      bindtouchstart="onTouchStart"
+      bindtouchmove="onTouchMove"
+      binderror="onCanvasError"
+    ></canvas>
+    <view class="sig-actions">
+      <view class="mini-btn" bindtap="clearCanvas">重写</view>
+    </view>
+    <view class="sig-tip" wx:if="{{!hasSig}}">尚未签名</view>
+    <view class="sig-tip ok" wx:else>已签名，可提交</view>
+  </view>
+
+  <button class="btn-primary" bindtap="submit" disabled="{{submitting}}">提交签名</button>
+
+  <view class="legal">
+    电子签名与手写签名具有同等法律效力；签名图片将作为服务履约凭证存档。
+  </view>
+</view>
